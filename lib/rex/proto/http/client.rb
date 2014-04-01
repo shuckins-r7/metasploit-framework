@@ -175,7 +175,7 @@ class Client
     # If we already have a connection and we aren't pipelining, close it.
     if (self.conn)
       if !pipelining?
-        File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} Connect close"}
+        File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} Connect close\n"}
         close
       else
         return self.conn
@@ -201,12 +201,12 @@ class Client
   # Closes the connection to the remote server.
   #
   def close
-    File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} Connect before shutdown"}
+    File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} Connect before shutdown\n"}
     if (self.conn)
       self.conn.shutdown
-      File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} Connect shutdown"}
+      File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} Connect shutdown\n"}
       self.conn.close
-      File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} Connect close after shutdown"}
+      File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} Connect close after shutdown\n"}
     end
 
     self.conn = nil
@@ -220,7 +220,7 @@ class Client
   #
   # @return (see #_send_recv)
   def send_recv(req, t = -1, persist=false)
-    File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} send/rcv"}
+    File.open(temp_log, 'a') {|f| f.write "#{Time.new.utc} - #{Process.pid} send/rcv\n"}
     res = _send_recv(req,t,persist)
     if res and res.code == 401 and res.headers['WWW-Authenticate']
       res = send_auth(res, req.opts, t, persist)
